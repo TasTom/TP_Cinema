@@ -10,7 +10,8 @@
 
     <p class="eyebrow">Réservation</p>
     <h1>Réserver une place</h1>
-    <p class="lead">Le montant total est calculé par le serveur au moment de la confirmation.</p>
+    <p class="lead">Quelques informations et vous voilà prêt pour la séance.</p>
+    <ol class="booking-steps" aria-label="Étapes de réservation"><li>Séance choisie</li><li aria-current="step">Vos places</li><li>Confirmation</li></ol>
 
     <div class="two-columns">
         <section class="summary" aria-labelledby="titre-seance">
@@ -65,6 +66,8 @@
                     <div th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</div>
                 </div>
 
+                <p class="price-preview">Total estimé <strong data-estimation th:attr="data-prix=${seance.prixUnitaire}" aria-live="polite">—</strong></p>
+                <p class="muted">Le montant et les places disponibles sont confirmés lors de l’enregistrement.</p>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Confirmer la réservation</button>
                     <a class="btn btn-ghost" th:href="@{/seances}">Annuler</a>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +32,17 @@ public class CatalogueController {
         model.addAttribute("films", films.rechercher(titre, genre));
         model.addAttribute("titre", titre);
         model.addAttribute("genre", genre);
+        model.addAttribute("genres", films.rechercher(null, null).stream().map(Film::getGenre)
+                .filter(java.util.Objects::nonNull).distinct().sorted().toList());
         return "films/index";
+    }
+
+    @GetMapping("/films/{id}")
+    public String ficheFilm(@PathVariable Long id, Model model) {
+        model.addAttribute("film", films.trouver(id));
+        model.addAttribute("seances", seances.rechercher(LocalDate.now(), null).stream()
+                .filter(s -> id.equals(s.filmId())).toList());
+        return "films/fiche";
     }
 
     @GetMapping("/seances")

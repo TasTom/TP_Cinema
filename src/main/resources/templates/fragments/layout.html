@@ -1,55 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(titre)">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#13283b">
+    <meta name="description" content="Découvrez les films, choisissez votre séance et réservez vos places avec CinéBil.">
     <title th:text="${titre} + ' · CinéBil'">CinéBil</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head>
-<body>
-
+    <script defer th:src="@{/js/app.js}"></script>
+</head><body>
 <header th:fragment="header" class="site-header">
-    <div class="container header-inner">
-        <a class="brand" th:href="@{/}" aria-label="CinéBil, retour à l'accueil">
-            <span class="brand-mark" aria-hidden="true">C</span>
-            <span>CinéBil</span>
-        </a>
-        <nav class="nav" aria-label="Navigation principale">
-            <a th:href="@{/}">Accueil</a>
-            <a th:href="@{/films}">Films</a>
-            <a th:href="@{/seances}">Séances</a>
-            <a th:if="${estAdmin or estProgrammateur}" th:href="@{/admin}">Administration</a>
-        </nav>
-        <div class="user-area">
-            <th:block th:if="${currentUser != null}">
-                <span class="user-name" th:text="${currentUser}">client</span>
-                <form th:action="@{/logout}" method="post" class="inline-form">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    <button type="submit" class="btn btn-ghost btn-small">Déconnexion</button>
-                </form>
-            </th:block>
-            <a th:if="${currentUser == null}" class="btn btn-small" th:href="@{/login}">Connexion</a>
-        </div>
-    </div>
+ <div class="container header-inner">
+  <a class="brand" th:href="@{/}" aria-label="CinéBil, retour à l'accueil"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span translate="no">CinéBil<span class="brand-dot">.</span></span></a>
+  <button class="menu-toggle" type="button" hidden aria-expanded="false" aria-controls="navigation" data-menu>Menu <span aria-hidden="true">☰</span></button>
+  <nav id="navigation" class="nav" aria-label="Navigation principale">
+   <a th:href="@{/}" th:attr="aria-current=${cheminCourant == '/' ? 'page' : null}">Accueil</a>
+   <a th:href="@{/films}" th:attr="aria-current=${cheminCourant != null and #strings.startsWith(cheminCourant, '/films') ? 'page' : null}">Les films</a>
+   <a th:href="@{/seances}" th:attr="aria-current=${cheminCourant != null and #strings.startsWith(cheminCourant, '/seances') ? 'page' : null}">Les séances</a>
+   <a th:if="${estAdmin or estProgrammateur}" th:href="@{/admin}">Administration</a>
+  </nav>
+  <div class="user-area">
+   <th:block th:if="${currentUser != null}"><span class="user-name" th:text="${currentUser}">client</span><form th:action="@{/logout}" method="post" class="inline-form"><input th:replace="~{fragments/layout :: csrf}"><button type="submit" class="btn btn-ghost btn-small">Déconnexion</button></form></th:block>
+   <a th:if="${currentUser == null}" class="btn btn-outline btn-small" th:href="@{/login}">Connexion</a>
+  </div>
+ </div>
 </header>
-
-<footer th:fragment="footer" class="site-footer">
-    <div class="container footer-inner">
-        <span>CinéBil · Billetterie de cinéma · Projet BUT Informatique 3</span>
-        <span>
-            <a th:href="@{/swagger-ui.html}">Documentation API</a>
-            <span aria-hidden="true"> · </span>
-            <a th:href="@{/actuator/health}">Santé du service</a>
-        </span>
-    </div>
-</footer>
-
-<div th:fragment="messages">
-    <div th:if="${succes}" class="alert alert-success" role="status" th:text="${succes}"></div>
-    <div th:if="${erreur}" class="alert alert-error" role="alert" th:text="${erreur}"></div>
-</div>
-
+<footer th:fragment="footer" class="site-footer"><div class="container footer-grid">
+ <div><a class="brand" th:href="@{/}" translate="no">CinéBil<span class="brand-dot">.</span></a><p>Les histoires sont plus grandes<br>quand on les partage.</p></div>
+ <nav aria-label="Liens utiles"><a th:href="@{/films}">Trouver un film</a><a th:href="@{/seances}">Choisir une séance</a><a th:href="@{/login}">Mon espace</a></nav>
+ <div class="footer-source"><a href="https://www.themoviedb.org/" rel="noreferrer"><img class="tmdb-logo" th:src="@{/images/tmdb.svg}" alt="TMDB" width="62" height="45" loading="lazy"></a><p>Le cinéma, tout simplement.</p><small>Données : <a href="https://ghibliapi.vercel.app/" rel="noreferrer">Studio Ghibli API</a> et <a href="https://www.themoviedb.org/" rel="noreferrer">TMDB</a>.<br>This product uses the TMDB API but is not endorsed or certified by TMDB.</small></div>
+ </div><div class="container footer-bottom"><span>Projet BUT Informatique · Interface de démonstration</span><div><a th:href="@{/swagger-ui.html}">Documentation API</a><a th:href="@{/actuator/health}">Santé du service</a></div></div></footer>
+<div th:fragment="messages" class="messages" aria-live="polite"><div th:if="${succes}" class="alert alert-success" role="status" th:text="${succes}"></div><div th:if="${erreur}" class="alert alert-error" role="alert" th:text="${erreur}"></div></div>
 <input th:fragment="csrf" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
-</body>
-</html>
+</body></html>
