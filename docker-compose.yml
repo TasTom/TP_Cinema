@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:9.7
+    container_name: cinema-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-cinema}
+      MYSQL_USER: ${MYSQL_USER:-cinema}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cinema}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - cinema_mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "cinema", "-pcinema"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  cinema_mysql_data:
