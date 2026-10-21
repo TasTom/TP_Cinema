@@ -42,6 +42,7 @@ risques/parades + plan de documentation, puis questionnaire de validation.
 ## Prompt 2 — Exigences de qualité
 
 > Le développement ce fais via spécification,
+>
 > - Architecture propre et profesionnel
 > - Dernière technologie et récente
 
@@ -62,15 +63,15 @@ risques/parades + plan de documentation, puis questionnaire de validation.
 
 ## Prompt 3 — Validation des choix structurants (réponses au questionnaire)
 
-| Question | Choix retenu |
-|---|---|
+| Question                          | Choix retenu                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------------- |
 | Périmètre du frontend Thymeleaf | **Complet** : catalogue public, réservation cliente, back-office Admin/Programmateur |
-| Stratégie de concurrence | **Verrou pessimiste** `SELECT … FOR UPDATE` |
-| Bonus | **Métriques Micrometer** (places réservées / refusées) |
-| Langue de la documentation | **Français** (vocabulaire métier conservé : Film, Salle, Seance, Reservation) |
-| JDK de build | **JDK 25 local** `C:\Users\tomta\.jdks\ms-25.0.4.1` |
-| MySQL de développement | **Docker `mysql:9.7`** (dernière LTS) |
-| Initialisation Git | **Oui**, commits par étapes |
+| Stratégie de concurrence         | **Verrou pessimiste** `SELECT … FOR UPDATE`                                        |
+| Bonus                             | **Métriques Micrometer** (places réservées / refusées)                            |
+| Langue de la documentation        | **Français** (vocabulaire métier conservé : Film, Salle, Seance, Reservation)      |
+| JDK de build                      | **JDK 25 local** `C:\Users\tomta\.jdks\ms-25.0.4.1`                                 |
+| MySQL de développement           | **Docker `mysql:9.7`** (dernière LTS)                                              |
+| Initialisation Git                | **Oui**, commits par étapes                                                          |
 
 **Conséquences**
 
@@ -128,11 +129,139 @@ un agent ou un tiers n'avait été créé.
    chargée automatiquement par Copilot, qui renvoie vers `AGENTS.md`.
 3. Mise à jour de l'index documentaire du README.
 
-**Règle** : `AGENTS.md` est la source de vérité ; `copilot-instructions.md` ne contient que les
+**Règle historique, remplacée par la fusion du prompt 6** : `AGENTS.md` est la source de vérité ; `copilot-instructions.md` ne contient que les
 règles bloquantes, pour éviter toute divergence entre les deux fichiers.
 
 ---
 
-## Prompt 6 et suivants
+## Prompt 6 — Fusion des consignes et poursuite du projet
 
-À compléter à chaque nouvel échange.
+**Date** : 2026-10-21
+
+```text
+continue le projet et fussione AGENTS.md et copilot-instructions.md
+Je pense que c'est une bonne chose ?
+```
+
+**Mise en œuvre**
+
+- Fusionner les consignes dans `AGENTS.md`, référence unique ; conserver
+  `.github/copilot-instructions.md` comme point d'entrée renvoyant vers ce fichier.
+- Préserver les modifications locales déjà présentes dans `AGENTS.md`, notamment la suppression
+  du trailer d'attribution Copilot obligatoire.
+- Poursuivre par des tests MVC de l'interface Thymeleaf : rendu réel des pages, réservation,
+  validation, erreurs métier, rôles et protection CSRF. Ce choix renforce l'extension existante
+  et conserve le périmètre du bonus Micrometer (ADR-010).
+- Consigner les décisions et les résultats effectivement observés dans les documents dédiés.
+
+**Corrections découvertes pendant la validation**
+
+- Le wrapper Windows indexait une propriété `Target` nulle pour un cache Maven ordinaire :
+  contrôle préalable ajouté, versions conservées (ADR-013).
+- Les pages d'erreur Thymeleaf ne recevaient plus les attributs communs de navigation après
+  résolution d'une exception. `UiExceptionHandler` réutilise maintenant leur initialisation,
+  avec tests de non-régression pour un client connecté et un visiteur anonyme.
+
+## Prompt 7 — Audit approfondi par rapport au sujet
+
+**Date** : 2026-10-21
+
+```text
+par rapport à Examen_TP_Billetterie_Cinema_Java25.pdf
+Reprends fais une analyse approfondies regarde les edges du projets, la sécurité etc...
+```
+
+**Mise en œuvre** : relire le PDF original, confronter les exigences au code et aux tests,
+examiner les cas limites, la sécurité, la concurrence et l'exploitation, reproduire les défauts
+sur des données isolées et produire un audit priorisé avec preuves et limites.
+
+**Résultat** : PDF de 9 pages relu, build isolé de référence réussi (64 tests), puis 28 sondes
+distinctes exécutées (18 réussites, 10 échecs d'assertion, aucune erreur d'exécution ni aucun
+test ignoré). Huit constats priorisés et les limites de production sont consignés dans
+`AUDIT_2026-10-21.md`. Les sondes et résultats sont archivés dans `docs/audit/2026-10-21/`.
+La mémoire et la documentation ne présentent plus la recette nominale comme une conformité
+exhaustive. Aucun correctif applicatif appliqué pendant cette analyse.
+
+---
+
+## Prompt 8 — Enrichissement et refonte de l'application
+
+**Date** : 2026-10-21
+
+```text
+Ensuite continue l'application, vas le plus loin possible, affiche, animation du site, meilleurs visuels, récupération des films via api externe, meilleur charte graphique/ meilleur UI/UX via des skills/mcp que tu peux chercher via le skill : find-skills
+```
+
+**Mise en œuvre** : découvrir les skills de design demandés, corriger les risques reproduits,
+enrichir le catalogue via une API externe, refondre l'interface et ses parcours avec affiches
+et animations accessibles, puis vérifier le build et le rendu de l'application lancée.
+
+### Réponses sur le choix du catalogue — verbatim
+
+```text
+je pensais à une API tvmaze ?
+```
+
+```text
+y'a pas un équivelent qui fais les films ?
+```
+
+**Décision** : TVmaze étant consacré aux séries, retenir TMDB pour les films généralistes
+(jeton personnel côté serveur), avec Ghibli sans clé pour un catalogue immédiatement utilisable.
+Les affiches sont conservées localement ; une importation ne crée pas de séance.
+
+**Résultat livré** : charte bleu de salle et cuivre, accueil panoramique, cartes d'affiches,
+fiches film, planning, formulaires et menu mobile ; Ghibli utilisable en direct, TMDB prêt pour
+un jeton serveur. Correctifs A01–A08 intégrés, 117 tests verts, JAR lancé et recette Chrome
+bureau/mobile. Skills installés et appliqués : find-skills, frontend-design, web-design-guidelines.
+Le README, la mémoire, les ADR et le procès-verbal ont été mis à jour.
+
+## Prompt 9 — Configuration locale TMDB
+
+```text
+j'ai fais la commande :  $env:TMDB_API_TOKEN = "eyJhbGc*****
+```
+
+**Mise en œuvre** : conserver la valeur masquée telle que fournie, ne pas demander le jeton.
+La variable définie dans le terminal de l'utilisateur n'est pas présente dans l'environnement
+de l'agent ni dans le JAR déjà lancé. Ajouter `scripts/lancer.ps1` pour un redémarrage depuis
+ce même terminal, avec héritage de l'environnement et sans afficher/enregistrer le secret.
+
+## Prompt 10 — Redémarrage du projet
+
+```text
+redémarre le projet ?
+```
+
+**Contexte constaté** : l'instance en écoute sur le port 8080 exécutait encore le JAR construit
+à 15:22, donc **antérieur** aux évolutions de l'après-midi (V3/V4, catalogue Ghibli/TMDB,
+nouvelle interface, correctifs A01–A08). Le redémarrage devait recharger ces sources.
+
+**Mise en œuvre** :
+
+1. Arrêt de l'instance obsolète identifiée par sa ligne de commande, pas par son nom.
+2. Reconstruction depuis les sources courantes : `.\mvnw.cmd clean package -DskipTests`
+   → **BUILD SUCCESS**, JAR régénéré.
+3. Redémarrage via le lanceur officiel [`scripts/lancer.ps1`](../scripts/lancer.ps1), et non par un
+   `java -jar` manuel : le script vérifie JDK 25 et le JAR, identifie le processus propriétaire du
+   port, démarre MySQL avec `--wait`, écrit `.tools/cinema.pid` et redirige les journaux vers `logs/`.
+4. Contrôles après démarrage :
+
+| Chemin                                             | Statut              |
+| -------------------------------------------------- | ------------------- |
+| `/actuator/health`                               | 200                 |
+| `/`, `/films`, `/films/5`, `/seances`      | 200                 |
+| `/js/app.js`                                     | 200                 |
+| `/api/films`, `/api/seances`, `/v3/api-docs` | 200                 |
+| `/admin` anonyme                                 | 302 vers `/login` |
+
+Flyway : 4 migrations validées, schéma déjà en version 4, aucune migration à appliquer.
+Huit films sont servis, dont les cinq entrées Ghibli issues de `V4`.
+
+**Limite signalée** : le lanceur affiche `Jeton TMDB transmis au serveur : False`. Le jeton défini
+dans le terminal de l'utilisateur n'est pas hérité par l'environnement de l'agent. Pour activer
+l'import TMDB, exécuter `.\scripts\lancer.ps1` **depuis le terminal où `TMDB_API_TOKEN` est défini** :
+le script arrête l'instance courante (PID suivi) et la relance avec la variable héritée.
+
+**Défaut mineur relevé, non corrigé sans accord** : `/favicon.svg` répond 302 vers `/login`, car la
+chaîne de sécurité de l'interface autorise `/favicon.ico` mais pas `/favicon.svg`.

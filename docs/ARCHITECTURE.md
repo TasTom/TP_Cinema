@@ -225,3 +225,31 @@ src/test/java/fr/butinfo/cinema
 
 Choix : les tests Testcontainers portent `@Testcontainers(disabledWithoutDocker = true)`, donc un
 poste sans Docker voit ces classes ignorées sans faire échouer le build, conformément au sujet.
+
+
+## Extension de catalogue et interface — 2026-10-21
+
+`CatalogueImportController → CatalogueExterneService / ImportFilmService → FilmService / FilmRepository`.
+Les réponses externes sont des `FilmExterne` immuables. `AffichesService` valide et conserve les
+médias hors transaction ; `ImportFilmService` applique ensuite l'enrichissement dans une
+transaction courte. La contrainte V4 empêche un doublon pour un même identifiant fournisseur.
+Les vues publiques affichent uniquement les films enregistrés et leurs médias locaux.
+
+```mermaid
+sequenceDiagram
+    actor P as Programmateur
+    participant U as Import Thymeleaf
+    participant C as Catalogue externe
+    participant D as Disque local
+    participant B as MySQL
+    P->>U: Rechercher puis importer (CSRF)
+    U->>C: Détail du film, jeton serveur si TMDB
+    U->>D: Télécharger et valider les médias autorisés
+    U->>B: Transaction : retrouver ou créer, enrichir
+    B-->>U: Identifiant du film
+    U-->>P: Fiche film, programmation séparée
+```
+
+La réservation conserve son verrou pessimiste. L'annulation emploie aussi une mise à jour
+conditionnelle du statut pour distinguer une transition réelle d'une demande déjà traitée.
+Les compteurs de succès sont publiés après commit, via `TransactionSynchronization`.

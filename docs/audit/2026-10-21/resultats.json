@@ -1,0 +1,179 @@
+{
+    "date":  "2026-10-21",
+    "fuseau":  "Europe/Paris",
+    "baseline":  {
+                     "commande":  "clean verify",
+                     "tests":  64,
+                     "echecs":  0,
+                     "erreurs":  0,
+                     "ignores":  0,
+                     "fin":  "16:15:47",
+                     "copie_isolee":  true,
+                     "fichiers_source_identiques_sha256":  87
+                 },
+    "sondes":  [
+                   {
+                       "execution":  "cas-limites-initial",
+                       "tests":  15,
+                       "echecs":  10,
+                       "erreurs":  0,
+                       "ignores":  0,
+                       "cas":  [
+                                   {
+                                       "nom":  "reserveHuitPlacesPourUnPrixAutoriseParLeDto",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "ignoreUnMontantEtUnStatutFournisParLeClient",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "neCompteUneAnnulationConcurrenteQuUneSeuleFois",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "conserveUnCodeStableSurUneRouteApiInconnue",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "refuseUneQuantiteDecimaleSansLaTronquer",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "nePubliePasLesMotsDePasseDansLaPageDeConnexion",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "echappeUnTitreHtmlDansLeCatalogue",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "refuseUneDateExtremeAvecUneErreurClient",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "renvoie406PourUnFormatDeReponseNonPrisEnCharge",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "refuseUnIdentifiantDecimalSansCiblerUneAutreSeance",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "neComptePasUneReservationDontLaTransactionEstAnnulee",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "transformeUnConflitDeVerrouEn409SansEcriture",
+                                       "resultat":  "echec_assertion"
+                                   },
+                                   {
+                                       "nom":  "renvoie405PourUneMethodeNonAutorisee",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "constateLAnnulationSansLienAvecLeCompteCreateur",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "renvoie415PourUnTypeDeCorpsNonPrisEnCharge",
+                                       "resultat":  "echec_assertion"
+                                   }
+                               ],
+                       "observations":  [
+                                            "AUDIT|montant-maximal|http=409|{\"timestamp\":\"2026-10-21T14:18:37.880444800Z\",\"status\":409,\"code\":\"CONFLIT_DONNEES\",\"message\":\"Un conflit de données empêche l\u0027opération.\",\"path\":\"/api/reservations\"}",
+                                            "AUDIT|champs-metier-injectes|http=201|{\"id\":1,\"code\":\"RES-6EA8A26696\",\"seanceId\":6,\"filmTitre\":\"Audit\",\"salleNom\":\"Salle Audit\",\"debut\":\"2026-11-10T20:00:00\",\"emailClient\":\"audit@example.test\",\"nombrePlaces\":3,\"statut\":\"CONFIRMEE\",\"montantTotal\":29.70,\"creeeLe\":\"2026-10-21T14:18:38.0977184\"}",
+                                            "AUDIT|double-annulation|delta-metrique=2.0",
+                                            "AUDIT|route-inconnue|http=404|{\"timestamp\":\"2026-10-21T14:18:38.549Z\",\"status\":404,\"error\":\"Not Found\",\"path\":\"/api/absent\"}",
+                                            "AUDIT|quantite-decimale|http=201|{\"id\":3,\"code\":\"RES-D22FC08C0D\",\"seanceId\":9,\"filmTitre\":\"Audit\",\"salleNom\":\"Salle Audit\",\"debut\":\"2026-11-10T20:00:00\",\"emailClient\":\"audit@example.test\",\"nombrePlaces\":1,\"statut\":\"CONFIRMEE\",\"montantTotal\":9.90,\"creeeLe\":\"2026-10-21T14:18:38.7182814\"}",
+                                            "AUDIT|mots-de-passe-page-login|admin123=true",
+                                            "AUDIT|xss-stockee|http=200",
+                                            "AUDIT|date-extreme|http=500|{\"timestamp\":\"2026-10-21T14:18:39.730361500Z\",\"status\":500,\"code\":\"ERREUR_INTERNE\",\"message\":\"Une erreur interne est survenue.\",\"path\":\"/api/seances\"}",
+                                            "AUDIT|accept|http=406|",
+                                            "AUDIT|identifiant-decimal|http=201|{\"id\":4,\"code\":\"RES-6FA08B52F1\",\"seanceId\":14,\"filmTitre\":\"Audit\",\"salleNom\":\"Salle Audit\",\"debut\":\"2026-11-10T20:00:00\",\"emailClient\":\"audit@example.test\",\"nombrePlaces\":1,\"statut\":\"CONFIRMEE\",\"montantTotal\":9.90,\"creeeLe\":\"2026-10-21T14:18:40.0467126\"}",
+                                            "AUDIT|rollback|delta-metrique=1.0",
+                                            "AUDIT|expiration-verrou|http=500|{\"timestamp\":\"2026-10-21T14:18:46.341026400Z\",\"status\":500,\"code\":\"ERREUR_INTERNE\",\"message\":\"Une erreur interne est survenue.\",\"path\":\"/api/reservations\"}",
+                                            "AUDIT|methode-inconnue|http=405|{\"timestamp\":\"2026-10-21T14:18:46.492Z\",\"status\":405,\"error\":\"Method Not Allowed\",\"path\":\"/api/films\"}",
+                                            "AUDIT|annulation-autre-client|http=204|",
+                                            "AUDIT|content-type|http=500|{\"timestamp\":\"2026-10-21T14:18:46.869273700Z\",\"status\":500,\"code\":\"ERREUR_INTERNE\",\"message\":\"Une erreur interne est survenue.\",\"path\":\"/api/reservations\"}"
+                                        ]
+                   },
+                   {
+                       "execution":  "securite",
+                       "tests":  11,
+                       "echecs":  0,
+                       "erreurs":  0,
+                       "ignores":  0,
+                       "cas":  [
+                                   {
+                                       "nom":  "controleLesVraisIdentifiantsBcryptEtLesRoles(String, String, int)[1]",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "controleLesVraisIdentifiantsBcryptEtLesRoles(String, String, int)[2]",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "controleLesVraisIdentifiantsBcryptEtLesRoles(String, String, int)[3]",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "controleLesVraisIdentifiantsBcryptEtLesRoles(String, String, int)[4]",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "controleLesVraisIdentifiantsBcryptEtLesRoles(String, String, int)[5]",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "accepteLaConnexionAvecUnJetonCsrf",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "exposeLesLecturesAvecLesEntetesDeProtection",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "refuseUneConnexionSansJetonCsrf",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "neDonnePasUneAutorisationCorsArbitraire",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "neReutilisePasLaSessionWebPourAuthentifierApi",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "protegeLaDeconnexionParCsrf",
+                                       "resultat":  "reussi"
+                                   }
+                               ],
+                       "observations":  [
+
+                                        ]
+                   },
+                   {
+                       "execution":  "complements",
+                       "tests":  2,
+                       "echecs":  0,
+                       "erreurs":  0,
+                       "ignores":  0,
+                       "cas":  [
+                                   {
+                                       "nom":  "appliqueLesContraintesSqlSurUneBaseReelle",
+                                       "resultat":  "reussi"
+                                   },
+                                   {
+                                       "nom":  "reutiliseLesPlacesAnnuleesSansLesLibererDeuxFois",
+                                       "resultat":  "reussi"
+                                   }
+                               ],
+                       "observations":  [
+                                            "AUDIT|contraintes-sql|unicite-salle+duree-film+prix-positif=OK",
+                                            "AUDIT|reutilisation-apres-annulation|http=409|{\"timestamp\":\"2026-10-21T14:23:54.107809600Z\",\"status\":409,\"code\":\"CAPACITE_INSUFFISANTE\",\"message\":\"La séance est complète.\",\"path\":\"/api/reservations\"}"
+                                        ]
+                   }
+               ]
+}

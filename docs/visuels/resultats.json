@@ -1,0 +1,110 @@
+[
+  {
+    "page": "/",
+    "statut": 200,
+    "debordement": false,
+    "images_invalides": []
+  },
+  {
+    "page": "/films",
+    "statut": 200,
+    "debordement": false,
+    "images_invalides": []
+  },
+  {
+    "page": "/seances",
+    "statut": 200,
+    "debordement": false,
+    "images_invalides": []
+  },
+  {
+    "page": "/admin/catalogue",
+    "statut": 200,
+    "debordement": false,
+    "images_invalides": []
+  },
+  {
+    "page": "/admin/films",
+    "statut": 200,
+    "debordement": false,
+    "images_invalides": []
+  },
+  {
+    "reservation": "formulaire",
+    "estimation_2_places": "19,80 €"
+  },
+  {
+    "page": "/",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/films",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/seances",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/films/1",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/reservation/1",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/admin/films",
+    "largeur": 390,
+    "debordement": false
+  },
+  {
+    "page": "/",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "page": "/films",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "page": "/seances",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "page": "/films/1",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "page": "/reservation/1",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "page": "/admin/films",
+    "largeur": 320,
+    "debordement": false
+  },
+  {
+    "reduction_mouvement": [
+      "0s"
+    ]
+  },
+  {
+    "lecture_publique_sans_cdn": true
+  },
+  {
+    "lien_evitement_clavier": true
+  },
+  {
+    "erreurs_js": []
+  }
+]

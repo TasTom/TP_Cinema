@@ -268,6 +268,9 @@ temporairement l'exposition dans un profil de diagnostic.
 |---|---|---|
 | Accueil | `/` | Public |
 | Catalogue | `/films` | Public |
+| Fiche film | `/films/{id}` | Public |
+| Affiches locales | `/affiches/{nom}` | Public |
+| Catalogue externe et import POST | `/admin/catalogue`, `/admin/catalogue/importer` | `PROGRAMMATEUR`, `ADMIN` + CSRF |
 | Planning | `/seances` | Public |
 | Réservation | `/reservation/{seanceId}` | `CLIENT`, `ADMIN` |
 | Confirmation | `/reservation/confirmation` | `CLIENT`, `ADMIN` |
@@ -279,3 +282,21 @@ temporairement l'exposition dans un profil de diagnostic.
 | Toutes les réservations | `/admin/reservations` | `ADMIN` |
 
 L'interface utilise les mêmes services que l'API et ne modifie aucun contrat REST.
+
+
+## 6. Précisions après audit
+
+Les nombres JSON décimaux vers des champs entiers sont refusés en 400, au lieu d'être tronqués.
+Un prix avec plus de deux décimales est rejeté. Les dates sont bornées à l'intervalle pris en
+charge par le service MySQL (1000-01-01 à 9999-12-30, borne exclusive du lendemain calculable).
+Les conflits d'obtention du verrou renvoient 409 `CONFLIT_CONCURRENCE` ; un type de contenu
+non pris en charge renvoie 415 `FORMAT_NON_PRIS_EN_CHARGE`. Une route API inconnue conserve
+un JSON d'erreur et un statut 404, y compris avec `Accept: text/html`.
+
+Les métadonnées d'enrichissement sont utilisées par l'interface. Les contrats des DTO REST
+existants sont conservés. Les métriques de confirmation et d'annulation suivent le commit SQL ;
+un rollback ne compte pas une réservation réussie. Une annulation déjà faite ne recompte pas
+la transition. Le cache HTTP des fichiers d'affiche est public et dure 30 jours.
+
+Une collision SQL entre imports est présentée par l'interface en 409 `IMPORT_CONCURRENT`.
+Une nouvelle tentative réutilise le film déjà enregistré pour le même identifiant fournisseur.

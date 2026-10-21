@@ -6,6 +6,15 @@ R5.08 Qualité du développement.
 Ce document transforme le sujet en **exigences vérifiables**, puis relie chaque exigence à
 l'implémentation et au test correspondant.
 
+**Réserve issue de la relecture du 2026-10-21** : cette matrice décrit le socle et les parcours
+nominaux. Elle ne démontre pas l'absence de défaut sur les cas limites. L'[audit approfondi](AUDIT_2026-10-21.md)
+la complète avec les écarts reproduits, leur priorité et les sondes exécutées.
+
+**Après correctifs et refonte** : les huit constats A01–A08 sont clôturés par des vérifications,
+les 28 sondes ont rejoint la suite principale. `clean verify` final : 117 tests verts, aucun
+ignoré. Les affiches, fiches film, import TMDB/Ghibli et animations restent une extension hors
+barème et préservent les DTO REST et la règle de capacité. Voir la recette et les ADR-015 à 017.
+
 ---
 
 ## 1. Périmètre
@@ -131,7 +140,7 @@ Endpoints de lecture complémentaires (non exigés, cohérents avec le modèle) 
 | Exigence | Mise en œuvre |
 |---|---|
 | HTTP Basic | `SecurityConfig`, `httpBasic(Customizer.withDefaults())` |
-| Mots de passe jamais en clair dans le code source | seuls des hachages BCrypt sont présents |
+| Mots de passe jamais en clair dans le code source | BCrypt dans `SecurityConfig`, mais identifiants fictifs en clair dans `templates/login.html` : écart A04 de l'audit |
 | BCrypt | `BCryptPasswordEncoder` (facteur 10) |
 | Trois comptes documentés | `client` / `client123`, `programmateur` / `prog123`, `admin` / `admin123` |
 | CLIENT : créer et annuler une réservation | règles `POST /api/reservations`, `DELETE /api/reservations/**` |
@@ -149,8 +158,10 @@ Note : deux chaînes de filtres coexistent — `@Order(1)` pour l'API REST (sans
 
 ## 7. Erreurs
 
-Toutes les erreurs passent par `GlobalExceptionHandler` (`@RestControllerAdvice` limité aux
-`@RestController`), ce qui exclut toute fuite de pile ou de détail SQL dans le corps JSON.
+Les erreurs métier des contrôleurs REST passent par `GlobalExceptionHandler`
+(`@RestControllerAdvice` limité aux `@RestController`). Les réponses d'erreur contrôlées
+n'exposent ni pile ni SQL. Cette centralisation ne couvre pas uniformément les erreurs de
+routage et de négociation HTTP ; les écarts A03, A05 et A07 sont détaillés dans l'audit.
 
 | Situation | Statut | Code |
 |---|---|---|
