@@ -7,6 +7,8 @@ import fr.butinfo.cinema.seance.Seance;
 import fr.butinfo.cinema.seance.SeanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -57,7 +59,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(
                 genererCodeUnique(), seance, email, command.nombrePlaces(), montantTotal);
         Reservation enregistree = reservations.saveAndFlush(reservation);
-        metrics.confirmee(command.nombrePlaces());
+        apresValidation(() -> metrics.confirmee(command.nombrePlaces()));
         return versResultat(enregistree);
     }
 
@@ -73,10 +75,10 @@ public class ReservationService {
         seances.findByIdForUpdate(reservation.getSeance().getId())
                 .orElseThrow(() -> new RessourceIntrouvableException("SEANCE_INTROUVABLE",
                         "La séance associée à la réservation n'existe plus."));
-        if (reservation.getStatut() == StatutReservation.CONFIRMEE) {
+        if (reservations.annulerSiConfirmee(reservation.getId(), StatutReservation.CONFIRMEE,
+                StatutReservation.ANNULEE) == 1) {
             reservation.annuler();
-            reservations.save(reservation);
-            metrics.annulee(reservation.getNombrePlaces());
+            apresValidation(() -> metrics.annulee(reservation.getNombrePlaces()));
         }
     }
 
@@ -107,6 +109,16 @@ public class ReservationService {
         if (command.nombrePlaces() < PLACES_MIN || command.nombrePlaces() > PLACES_MAX) {
             throw new DonneeInvalideException("VALIDATION_ECHOUEE",
                     "Le nombre de places doit être compris entre " + PLACES_MIN + " et " + PLACES_MAX + ".");
+        }
+    }
+
+    private void apresValidation(Runnable action) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override public void afterCommit() { action.run(); }
+            });
+        } else {
+            action.run();
         }
     }
 

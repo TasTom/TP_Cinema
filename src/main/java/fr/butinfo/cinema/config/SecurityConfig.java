@@ -85,7 +85,7 @@ public class SecurityConfig {
     public SecurityFilterChain uiSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/films", "/films/**", "/seances", "/seances/**",
-                                "/css/**", "/js/**", "/images/**", "/favicon.ico",
+                                "/css/**", "/js/**", "/images/**", "/affiches/**", "/favicon.ico",
                                 "/login", "/error", "/acces-refuse")
                         .permitAll()
                         .requestMatchers("/admin/salles", "/admin/salles/**",

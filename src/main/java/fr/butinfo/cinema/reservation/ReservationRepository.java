@@ -3,6 +3,7 @@ package fr.butinfo.cinema.reservation;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -20,6 +21,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByOrderByCreeeLeDesc();
 
     boolean existsByCode(String code);
+
+    @Modifying(flushAutomatically = true)
+    @Query("update Reservation r set r.statut = :annulee where r.id = :id and r.statut = :confirmee")
+    int annulerSiConfirmee(@Param("id") Long id, @Param("confirmee") StatutReservation confirmee,
+                           @Param("annulee") StatutReservation annulee);
 
     @Query("""
             select coalesce(sum(r.nombrePlaces), 0)

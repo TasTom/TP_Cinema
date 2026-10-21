@@ -44,7 +44,7 @@ public class Reservation {
     @Column(name = "statut", nullable = false, length = 20)
     private StatutReservation statut;
 
-    @Column(name = "montant_total", nullable = false, precision = 10, scale = 2)
+    @Column(name = "montant_total", nullable = false, precision = 11, scale = 2)
     private BigDecimal montantTotal;
 
     @Column(name = "creee_le", nullable = false)

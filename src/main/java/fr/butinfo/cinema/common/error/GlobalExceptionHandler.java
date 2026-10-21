@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.PessimisticLockingFailureException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -114,6 +116,18 @@ public class GlobalExceptionHandler {
         log.debug("Conflit d'intégrité en base", ex);
         return reponse(HttpStatus.CONFLICT, "CONFLIT_DONNEES",
                 "Un conflit de données empêche l'opération.", request);
+    }
+
+    @ExceptionHandler(PessimisticLockingFailureException.class)
+    ResponseEntity<ApiError> conflitVerrou(PessimisticLockingFailureException ex, HttpServletRequest request) {
+        return reponse(HttpStatus.CONFLICT, "CONFLIT_CONCURRENCE",
+                "Cette séance est en cours de modification. Réessayez dans quelques instants.", request);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    ResponseEntity<ApiError> formatNonPrisEnCharge(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
+        return reponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "FORMAT_NON_PRIS_EN_CHARGE",
+                "Envoyez les données au format application/json.", request);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

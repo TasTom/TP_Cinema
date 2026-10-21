@@ -100,6 +100,8 @@ class ReservationServiceTest {
         when(reservations.findByCode("RES-ANNULE")).thenReturn(Optional.of(reservation));
         when(seances.findByIdForUpdate(1L)).thenReturn(Optional.of(seance));
 
+        when(reservations.annulerSiConfirmee(1L, StatutReservation.CONFIRMEE, StatutReservation.ANNULEE))
+                .thenReturn(1, 0);
         service.annuler("RES-ANNULE");
         service.annuler("RES-ANNULE");
 

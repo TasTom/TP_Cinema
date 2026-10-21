@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +38,8 @@ public class SeanceService {
     }
 
     public List<SeanceResult> rechercher(LocalDate du, LocalDate au) {
+        validerDate(du);
+        validerDate(au);
         if (du != null && au != null && du.isAfter(au)) {
             throw new DonneeInvalideException("INTERVALLE_INVALIDE",
                     "La date de début doit être antérieure ou égale à la date de fin.");
@@ -69,12 +70,13 @@ public class SeanceService {
         if (command.debut() == null) {
             throw new DonneeInvalideException("VALIDATION_ECHOUEE", "La date et l'heure de la séance sont obligatoires.");
         }
+        validerDate(command.debut().toLocalDate());
         BigDecimal prix = command.prixUnitaire();
         if (prix == null || prix.signum() <= 0) {
             throw new DonneeInvalideException("VALIDATION_ECHOUEE", "Le prix unitaire doit être strictement positif.");
         }
         if (prix.scale() > 2) {
-            prix = prix.setScale(2, RoundingMode.HALF_UP);
+            throw new DonneeInvalideException("VALIDATION_ECHOUEE", "Le prix doit avoir au maximum deux décimales.");
         }
         if (prix.compareTo(PRIX_MAX) > 0) {
             throw new DonneeInvalideException("VALIDATION_ECHOUEE", "Le prix unitaire est trop élevé.");
@@ -103,5 +105,11 @@ public class SeanceService {
                 seance.getPrixUnitaire(),
                 salle.getCapacite(),
                 placesRestantes);
+    }
+
+    private void validerDate(LocalDate date) {
+        if (date != null && (date.getYear() < 1000 || date.isAfter(LocalDate.of(9999, 12, 30)))) {
+            throw new DonneeInvalideException("DATE_INVALIDE", "La date doit être comprise entre 1000 et le 30 décembre 9999.");
+        }
     }
 }
