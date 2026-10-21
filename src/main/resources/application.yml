@@ -51,3 +51,9 @@ logging:
   level:
     root: INFO
     fr.butinfo.cinema: INFO
+
+cinema:
+  tmdb:
+    token: ${TMDB_API_TOKEN:}
+  media:
+    directory: ${CINEMA_MEDIA_DIRECTORY:data/affiches}

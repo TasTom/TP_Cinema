@@ -1,51 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Films')}"></head>
-<body>
-<a class="skip-link" href="#contenu">Aller au contenu</a>
-<header th:replace="~{fragments/layout :: header}"></header>
-
-<main id="contenu" class="container">
-    <div th:replace="~{fragments/layout :: messages}"></div>
-
-    <p class="eyebrow">Catalogue</p>
-    <h1>Les films</h1>
-    <p class="lead">Filtrez par titre ou par genre, puis consultez les séances disponibles.</p>
-
-    <form class="filters" method="get" th:action="@{/films}" role="search">
-        <div class="field">
-            <label for="titre">Titre</label>
-            <input type="search" id="titre" name="titre" th:value="${titre}" placeholder="Ex. Inception">
-        </div>
-        <div class="field">
-            <label for="genre">Genre</label>
-            <input type="text" id="genre" name="genre" th:value="${genre}" placeholder="Ex. Drame">
-        </div>
-        <button type="submit" class="btn btn-primary">Filtrer</button>
-        <a class="btn btn-ghost" th:href="@{/films}">Réinitialiser</a>
-    </form>
-
-    <div th:if="${#lists.isEmpty(films)}" class="empty">
-        Aucun film ne correspond à votre recherche.
-    </div>
-    <div th:unless="${#lists.isEmpty(films)}" class="grid cards">
-        <article class="card" th:each="film : ${films}">
-            <div class="poster" aria-hidden="true" th:text="${#strings.substring(film.titre, 0, 1)}">F</div>
-            <div class="card-body">
-                <span class="badge" th:if="${film.genre}" th:text="${film.genre}">Genre</span>
-                <h3 th:text="${film.titre}">Titre du film</h3>
-                <p class="muted">
-                    <span th:text="${film.dureeMinutes} + ' min'">120 min</span>
-                    <span th:if="${film.dateSortie}">
-                        · <span th:text="${@format.date(film.dateSortie)}">01/01/2026</span>
-                    </span>
-                </p>
-                <a class="btn btn-small" th:href="@{/seances(filmId=${film.id})}">Voir les séances</a>
-            </div>
-        </article>
-    </div>
-</main>
-
-<footer th:replace="~{fragments/layout :: footer}"></footer>
-</body>
-</html>
+<!DOCTYPE html><html lang="fr" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Les films')}"></head><body><a class="skip-link" href="#contenu">Aller au contenu</a><header th:replace="~{fragments/layout :: header}"></header>
+<main id="contenu" class="container"><div th:replace="~{fragments/layout :: messages}"></div><div class="page-intro"><p class="section-intro">De nouvelles histoires vous attendent</p><h1>Trouvez votre prochain film.</h1><p class="lead">Des classiques, des découvertes et l’envie de revenir en salle.</p></div>
+ <form class="filters catalogue-filters" method="get" th:action="@{/films}" role="search"><div class="field search-field"><label for="titre">Rechercher un film</label><input type="search" id="titre" name="titre" th:value="${titre}" placeholder="Un titre, une envie…" maxlength="255" autocomplete="off"></div><div class="field"><label for="genre">Genre</label><select id="genre" name="genre"><option value="">Tous les genres</option><option th:each="g : ${genres}" th:value="${g}" th:text="${g}" th:selected="${g == genre}"></option></select></div><button type="submit" class="btn btn-primary">Rechercher</button><a class="btn btn-ghost" th:href="@{/films}">Réinitialiser</a></form>
+ <div class="results-line" aria-live="polite"><p><strong th:text="${#lists.size(films)}">3</strong> film(s) à découvrir</p><a th:if="${estAdmin or estProgrammateur}" class="text-link" th:href="@{/admin/catalogue}">Enrichir le catalogue</a></div>
+ <div th:if="${#lists.isEmpty(films)}" class="empty"><h2>Aucun film pour cette recherche.</h2><p>Essayez un autre titre ou explorez tous les genres.</p><a class="btn btn-outline" th:href="@{/films}">Voir tous les films</a></div><div class="poster-grid catalogue-grid"><th:block th:each="film : ${films}"><article th:replace="~{fragments/film :: carte(${film})}"></article></th:block></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

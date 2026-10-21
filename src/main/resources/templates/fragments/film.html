@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="fr" xmlns:th="http://www.thymeleaf.org"><body>
+<article th:fragment="carte(film)" class="film-card">
+ <a class="poster-link" th:href="@{/films/{id}(id=${film.id})}" th:attr="aria-label=${'Découvrir ' + film.titre}">
+  <img th:if="${film.affiche != null}" th:src="${film.affiche}" alt="" width="400" height="600" loading="lazy" decoding="async">
+  <div th:unless="${film.affiche != null}" class="poster-fallback"><span class="film-reel" aria-hidden="true">◉</span><span th:text="${film.titre}">Film</span></div>
+  <span class="poster-cta">Découvrir le film</span>
+ </a><div class="film-info"><div class="film-meta"><span th:text="${film.genre ?: 'Cinéma'}">Cinéma</span><span th:text="${film.dureeMinutes} + ' min'">120 min</span></div><h3><a th:href="@{/films/{id}(id=${film.id})}" th:text="${film.titre}">Film</a></h3><p th:if="${film.realisateur != null and !#strings.isEmpty(film.realisateur)}" th:text="${film.realisateur}"></p></div>
+</article></body></html>

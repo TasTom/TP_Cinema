@@ -9,4 +9,5 @@ target/
 .tools/
 *.log
 logs/
+data/affiches/
 .DS_Store

@@ -1,0 +1,6 @@
+<!DOCTYPE html><html lang="fr" xmlns:th="http://www.thymeleaf.org"><body>
+<article th:fragment="ligne(seance)" class="screening">
+ <div class="screening-date"><span th:text="${@format.jour(seance.debut)}">05/11/2026</span><strong th:text="${@format.heure(seance.debut)}">20:00</strong></div>
+ <div class="screening-info"><h3><a th:href="@{/films/{id}(id=${seance.filmId})}" th:text="${seance.filmTitre}">Film</a></h3><p class="muted"><span th:text="${seance.salleNom}">Salle</span><span class="dot" aria-hidden="true"></span><span th:text="${@format.monnaie(seance.prixUnitaire)}">9,90 €</span></p></div>
+ <div class="screening-action"><span class="availability" th:classappend="${seance.placesRestantes == 0 ? 'sold-out' : ''}" th:text="${seance.placesRestantes == 0 ? 'Complet' : seance.placesRestantes + ' places disponibles'}">Places disponibles</span><a th:if="${seance.placesRestantes > 0}" class="btn btn-primary btn-small" th:href="@{/reservation/{id}(id=${seance.id})}">Réserver</a><span th:if="${seance.placesRestantes == 0}" class="btn btn-small disabled" aria-disabled="true">Complet</span></div>
+</article></body></html>
