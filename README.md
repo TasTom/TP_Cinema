@@ -235,6 +235,7 @@ Détail complet : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §4,
 
 Documentation complémentaire :
 
+- [`AGENTS.md`](AGENTS.md) — **mémoire du projet** : règles, conventions, pièges, état, prochaines étapes
 - [`docs/ANALYSE_SPEC.md`](docs/ANALYSE_SPEC.md) — analyse du sujet et traçabilité A1–A10
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — couches, flux, diagramme de concurrence
 - [`docs/DECISIONS.md`](docs/DECISIONS.md) — décisions d'architecture (ADR)

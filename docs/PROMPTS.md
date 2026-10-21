@@ -105,6 +105,34 @@ mise en œuvre, et toute décision structurante est reportée dans `DECISIONS.md
 
 ---
 
-## Prompt 5 et suivants
+## Prompt 5 — Fichier de mémoire du projet
+
+> tu as créer le fichier de mémoire du projet ?
+
+**Constat** : non. La documentation existait (`README`, `ANALYSE_SPEC`, `ARCHITECTURE`,
+`DECISIONS`, `API`, `RECETTE`, `PROMPTS`) mais aucun **fichier de mémoire** lisible en premier par
+un agent ou un tiers n'avait été créé.
+
+**Actions**
+
+1. [`AGENTS.md`](../AGENTS.md) à la racine : mémoire canonique du projet.
+   - identité et statut ;
+   - 12 règles non négociables issues du sujet ;
+   - tableau des versions figées ;
+   - commandes de référence (avec `JAVA_HOME`) ;
+   - carte de l'architecture et fichiers clés ;
+   - conventions code / tests / Git ;
+   - **tableau des pièges déjà rencontrés** avec leur solution ;
+   - état vérifié, index documentaire, limites assumées, prochaines étapes.
+2. [`.github/copilot-instructions.md`](../.github/copilot-instructions.md) : version courte
+   chargée automatiquement par Copilot, qui renvoie vers `AGENTS.md`.
+3. Mise à jour de l'index documentaire du README.
+
+**Règle** : `AGENTS.md` est la source de vérité ; `copilot-instructions.md` ne contient que les
+règles bloquantes, pour éviter toute divergence entre les deux fichiers.
+
+---
+
+## Prompt 6 et suivants
 
 À compléter à chaque nouvel échange.
