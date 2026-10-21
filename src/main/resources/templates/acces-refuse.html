@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Accès refusé')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <section class="auth-card" aria-labelledby="titre-refus">
+        <p class="eyebrow">Erreur 403</p>
+        <h1 id="titre-refus">Accès refusé</h1>
+        <p class="lead">
+            Votre compte ne dispose pas des droits nécessaires pour accéder à cette page.
+        </p>
+        <div class="form-actions">
+            <a class="btn btn-primary" th:href="@{/}">Retour à l'accueil</a>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

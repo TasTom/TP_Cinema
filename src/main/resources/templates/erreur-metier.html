@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Erreur')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <section class="auth-card" aria-labelledby="titre-erreur">
+        <p class="eyebrow">Erreur <span th:text="${statut}">400</span></p>
+        <h1 id="titre-erreur" th:text="${titre}">Opération impossible</h1>
+        <p class="lead" th:text="${message}">Le message d'erreur.</p>
+        <p class="muted">Code : <code th:text="${code}">CODE</code></p>
+        <div class="form-actions">
+            <a class="btn btn-primary" th:href="@{/}">Retour à l'accueil</a>
+            <a class="btn btn-ghost" th:href="@{/seances}">Voir les séances</a>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

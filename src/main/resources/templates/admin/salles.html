@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gérer les salles')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Administration</p>
+    <h1>Salles</h1>
+    <p class="lead">Créez une salle. Son nom doit être unique et sa capacité comprise entre 20 et 500 places.</p>
+
+    <div class="two-columns">
+        <section class="form-card" aria-labelledby="titre-form-salle">
+            <h2 id="titre-form-salle">Nouvelle salle</h2>
+            <form th:action="@{/admin/salles}" method="post" th:object="${salleForm}">
+                <input th:replace="~{fragments/layout :: csrf}">
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="nom">Nom de la salle</label>
+                        <input type="text" id="nom" th:field="*{nom}" maxlength="100" required>
+                        <span class="error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}">Erreur</span>
+                    </div>
+                    <div class="field full">
+                        <label for="capacite">Capacité (places)</label>
+                        <input type="number" id="capacite" th:field="*{capacite}" min="20" max="500" required>
+                        <span class="error" th:if="${#fields.hasErrors('capacite')}" th:errors="*{capacite}">Erreur</span>
+                    </div>
+                </div>
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-error" role="alert">
+                    <div th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Créer la salle</button>
+                    <a class="btn btn-ghost" th:href="@{/admin}">Retour</a>
+                </div>
+            </form>
+        </section>
+
+        <section aria-labelledby="titre-liste-salles">
+            <h2 id="titre-liste-salles">Salles existantes</h2>
+            <div th:if="${#lists.isEmpty(salles)}" class="empty">Aucune salle pour le moment.</div>
+            <div th:unless="${#lists.isEmpty(salles)}" class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Capacité</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="salle : ${salles}">
+                        <td th:text="${salle.nom}">Salle</td>
+                        <td th:text="${salle.capacite} + ' places'">120 places</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

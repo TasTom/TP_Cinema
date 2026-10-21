@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gérer les films')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Administration</p>
+    <h1>Films</h1>
+    <p class="lead">Ajoutez un film au catalogue. Le titre et la durée sont contrôlés par le serveur.</p>
+
+    <div class="two-columns">
+        <section class="form-card" aria-labelledby="titre-form-film">
+            <h2 id="titre-form-film">Nouveau film</h2>
+            <form th:action="@{/admin/films}" method="post" th:object="${filmForm}">
+                <input th:replace="~{fragments/layout :: csrf}">
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="titre">Titre</label>
+                        <input type="text" id="titre" th:field="*{titre}" maxlength="255" required>
+                        <span class="error" th:if="${#fields.hasErrors('titre')}" th:errors="*{titre}">Erreur</span>
+                    </div>
+                    <div class="field">
+                        <label for="genre">Genre</label>
+                        <input type="text" id="genre" th:field="*{genre}" maxlength="80" placeholder="Drame">
+                        <span class="error" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">Erreur</span>
+                    </div>
+                    <div class="field">
+                        <label for="dureeMinutes">Durée (minutes)</label>
+                        <input type="number" id="dureeMinutes" th:field="*{dureeMinutes}" min="40" max="300" required>
+                        <span class="error" th:if="${#fields.hasErrors('dureeMinutes')}" th:errors="*{dureeMinutes}">Erreur</span>
+                    </div>
+                    <div class="field">
+                        <label for="dateSortie">Date de sortie</label>
+                        <input type="date" id="dateSortie" th:field="*{dateSortie}">
+                        <span class="error" th:if="${#fields.hasErrors('dateSortie')}" th:errors="*{dateSortie}">Erreur</span>
+                    </div>
+                </div>
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-error" role="alert">
+                    <div th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Créer le film</button>
+                    <a class="btn btn-ghost" th:href="@{/admin}">Retour</a>
+                </div>
+            </form>
+        </section>
+
+        <section aria-labelledby="titre-liste-films">
+            <h2 id="titre-liste-films">Catalogue</h2>
+            <div th:if="${#lists.isEmpty(films)}" class="empty">Aucun film pour le moment.</div>
+            <div th:unless="${#lists.isEmpty(films)}" class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Genre</th>
+                        <th>Durée</th>
+                        <th>Sortie</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="film : ${films}">
+                        <td th:text="${film.titre}">Titre</td>
+                        <td th:text="${film.genre ?: '—'}">Genre</td>
+                        <td th:text="${film.dureeMinutes} + ' min'">120 min</td>
+                        <td th:text="${film.dateSortie != null ? @format.date(film.dateSortie) : '—'}">01/01/2026</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

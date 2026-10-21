@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Connexion')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <section class="auth-card" aria-labelledby="titre-connexion">
+        <p class="eyebrow">Espace personnel</p>
+        <h1 id="titre-connexion">Connexion</h1>
+        <p class="muted">Connectez-vous pour réserver une séance ou accéder à l'administration.</p>
+
+        <div th:if="${param.error}" class="alert alert-error" role="alert">
+            Identifiants incorrects. Vérifiez votre nom d'utilisateur et votre mot de passe.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success" role="status">
+            Vous êtes déconnecté.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <input th:replace="~{fragments/layout :: csrf}">
+            <div class="field">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+            </div>
+            <div class="field">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+                <a class="btn btn-ghost" th:href="@{/}">Retour à l'accueil</a>
+            </div>
+        </form>
+
+        <details class="demo-accounts">
+            <summary>Comptes de démonstration</summary>
+            <ul>
+                <li><strong>client</strong> / client123 — réserver et annuler</li>
+                <li><strong>programmateur</strong> / prog123 — créer films et séances</li>
+                <li><strong>admin</strong> / admin123 — toutes les opérations protégées</li>
+            </ul>
+            <p>Ces comptes sont réservés à la démonstration locale.</p>
+        </details>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

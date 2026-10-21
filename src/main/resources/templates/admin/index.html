@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Administration')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Espace protégé</p>
+    <h1>Administration</h1>
+    <p class="lead">
+        Gérez le catalogue, la programmation et les salles.
+        <span th:if="${estProgrammateur and !estAdmin}">Votre profil permet de créer des films et des séances.</span>
+        <span th:if="${estAdmin}">Votre profil ADMIN donne accès à toutes les opérations.</span>
+    </p>
+
+    <div class="dashboard-grid">
+        <article class="stat-card">
+            <span class="stat-value" th:text="${nbFilms}">0</span>
+            <span class="muted">films au catalogue</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-value" th:text="${nbSeances}">0</span>
+            <span class="muted">séances programmées</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-value" th:text="${nbSalles}">0</span>
+            <span class="muted">salles</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-value" th:text="${nbReservations}">0</span>
+            <span class="muted">réservations enregistrées</span>
+        </article>
+    </div>
+
+    <div class="grid cards">
+        <article class="card">
+            <div class="card-body">
+                <h3>Films</h3>
+                <p class="muted">Ajouter un film au catalogue.</p>
+                <a class="btn btn-small" th:href="@{/admin/films}">Gérer les films</a>
+            </div>
+        </article>
+        <article class="card">
+            <div class="card-body">
+                <h3>Séances</h3>
+                <p class="muted">Programmer une séance dans une salle.</p>
+                <a class="btn btn-small" th:href="@{/admin/seances}">Gérer les séances</a>
+            </div>
+        </article>
+        <article class="card" th:if="${estAdmin}">
+            <div class="card-body">
+                <h3>Salles</h3>
+                <p class="muted">Créer une salle et définir sa capacité.</p>
+                <a class="btn btn-small" th:href="@{/admin/salles}">Gérer les salles</a>
+            </div>
+        </article>
+        <article class="card" th:if="${estAdmin}">
+            <div class="card-body">
+                <h3>Réservations</h3>
+                <p class="muted">Consulter toutes les réservations.</p>
+                <a class="btn btn-small" th:href="@{/admin/reservations}">Voir les réservations</a>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

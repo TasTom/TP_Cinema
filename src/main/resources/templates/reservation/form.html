@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Réservation')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Réservation</p>
+    <h1>Réserver une place</h1>
+    <p class="lead">Le montant total est calculé par le serveur au moment de la confirmation.</p>
+
+    <div class="two-columns">
+        <section class="summary" aria-labelledby="titre-seance">
+            <h2 id="titre-seance" th:text="${seance.filmTitre}">Titre du film</h2>
+            <div class="summary-row">
+                <span>Salle</span>
+                <strong th:text="${seance.salleNom}">Salle</strong>
+            </div>
+            <div class="summary-row">
+                <span>Date et heure</span>
+                <strong th:text="${@format.dateHeure(seance.debut)}">05/11/2026 à 20:00</strong>
+            </div>
+            <div class="summary-row">
+                <span>Prix unitaire</span>
+                <strong th:text="${@format.monnaie(seance.prixUnitaire)}">9,90 €</strong>
+            </div>
+            <div class="summary-row">
+                <span>Places restantes</span>
+                <strong th:text="${seance.placesRestantes} + ' place(s)'">12 place(s)</strong>
+            </div>
+            <p class="muted">
+                Une réservation peut contenir de 1 à 8 places. Les places sont
+                contrôlées à nouveau au moment de l'enregistrement.
+            </p>
+        </section>
+
+        <section class="form-card" aria-labelledby="titre-formulaire">
+            <h2 id="titre-formulaire">Vos informations</h2>
+            <form th:action="@{/reservation}" method="post" th:object="${formulaire}">
+                <input th:replace="~{fragments/layout :: csrf}">
+                <input type="hidden" th:field="*{seanceId}">
+
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="emailClient">Adresse e-mail</label>
+                        <input type="email" id="emailClient" th:field="*{emailClient}"
+                               th:classappend="${#fields.hasErrors('emailClient')} ? 'error'"
+                               autocomplete="email" required>
+                        <span class="error" th:if="${#fields.hasErrors('emailClient')}"
+                              th:errors="*{emailClient}">Erreur</span>
+                    </div>
+                    <div class="field full">
+                        <label for="nombrePlaces">Nombre de places (1 à 8)</label>
+                        <input type="number" id="nombrePlaces" th:field="*{nombrePlaces}"
+                               min="1" max="8" step="1" required>
+                        <span class="error" th:if="${#fields.hasErrors('nombrePlaces')}"
+                              th:errors="*{nombrePlaces}">Erreur</span>
+                    </div>
+                </div>
+
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-error" role="alert">
+                    <div th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Confirmer la réservation</button>
+                    <a class="btn btn-ghost" th:href="@{/seances}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gérer les séances')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Administration</p>
+    <h1>Séances</h1>
+    <p class="lead">Programmez un film dans une salle. Le prix doit être strictement positif.</p>
+
+    <div class="two-columns">
+        <section class="form-card" aria-labelledby="titre-form-seance">
+            <h2 id="titre-form-seance">Nouvelle séance</h2>
+            <form th:action="@{/admin/seances}" method="post" th:object="${seanceForm}">
+                <input th:replace="~{fragments/layout :: csrf}">
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="filmId">Film</label>
+                        <select id="filmId" th:field="*{filmId}" required>
+                            <option value="">— Choisir un film —</option>
+                            <option th:each="film : ${films}" th:value="${film.id}" th:text="${film.titre}"></option>
+                        </select>
+                        <span class="error" th:if="${#fields.hasErrors('filmId')}" th:errors="*{filmId}">Erreur</span>
+                    </div>
+                    <div class="field full">
+                        <label for="salleId">Salle</label>
+                        <select id="salleId" th:field="*{salleId}" required>
+                            <option value="">— Choisir une salle —</option>
+                            <option th:each="salle : ${salles}" th:value="${salle.id}"
+                                    th:text="${salle.nom + ' (' + salle.capacite + ' places)'}"></option>
+                        </select>
+                        <span class="error" th:if="${#fields.hasErrors('salleId')}" th:errors="*{salleId}">Erreur</span>
+                    </div>
+                    <div class="field">
+                        <label for="debut">Date et heure</label>
+                        <input type="datetime-local" id="debut" th:field="*{debut}" required>
+                        <span class="error" th:if="${#fields.hasErrors('debut')}" th:errors="*{debut}">Erreur</span>
+                    </div>
+                    <div class="field">
+                        <label for="prixUnitaire">Prix unitaire (€)</label>
+                        <input type="number" id="prixUnitaire" th:field="*{prixUnitaire}"
+                               min="0.01" step="0.01" required>
+                        <span class="error" th:if="${#fields.hasErrors('prixUnitaire')}" th:errors="*{prixUnitaire}">Erreur</span>
+                    </div>
+                </div>
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-error" role="alert">
+                    <div th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}">Erreur</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Créer la séance</button>
+                    <a class="btn btn-ghost" th:href="@{/admin}">Retour</a>
+                </div>
+            </form>
+        </section>
+
+        <section aria-labelledby="titre-liste-seances">
+            <h2 id="titre-liste-seances">Planning</h2>
+            <div th:if="${#lists.isEmpty(seances)}" class="empty">Aucune séance pour le moment.</div>
+            <div th:unless="${#lists.isEmpty(seances)}" class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Film</th>
+                        <th>Salle</th>
+                        <th>Prix</th>
+                        <th>Restantes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="seance : ${seances}">
+                        <td th:text="${@format.dateHeure(seance.debut)}">05/11/2026 à 20:00</td>
+                        <td th:text="${seance.filmTitre}">Film</td>
+                        <td th:text="${seance.salleNom}">Salle</td>
+                        <td th:text="${@format.monnaie(seance.prixUnitaire)}">9,90 €</td>
+                        <td th:text="${seance.placesRestantes + ' / ' + seance.capaciteSalle}">120 / 120</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

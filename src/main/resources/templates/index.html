@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Accueil')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Billetterie en ligne</p>
+            <h1>Votre place de cinéma, en quelques clics.</h1>
+            <p class="lead">
+                Découvrez les films à l'affiche, choisissez une séance et réservez jusqu'à
+                huit places. La disponibilité est vérifiée en temps réel.
+            </p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" th:href="@{/seances}">Voir les séances</a>
+                <a class="btn btn-ghost" th:href="@{/films}">Parcourir les films</a>
+            </div>
+        </div>
+        <aside class="hero-panel" aria-label="Fonctionnement">
+            <h2>Comment ça marche ?</h2>
+            <ul>
+                <li>Choisissez un film et une séance.</li>
+                <li>Indiquez votre adresse e-mail et le nombre de places.</li>
+                <li>Recevez immédiatement votre code de réservation.</li>
+            </ul>
+        </aside>
+    </section>
+
+    <section aria-labelledby="titre-affiche">
+        <div class="section-head">
+            <h2 id="titre-affiche">À l'affiche</h2>
+            <a th:href="@{/films}">Tous les films</a>
+        </div>
+        <div th:if="${#lists.isEmpty(films)}" class="empty">
+            Aucun film n'est programmé pour le moment.
+        </div>
+        <div th:unless="${#lists.isEmpty(films)}" class="grid cards">
+            <article class="card" th:each="film : ${films}">
+                <div class="poster" aria-hidden="true" th:text="${#strings.substring(film.titre, 0, 1)}">F</div>
+                <div class="card-body">
+                    <span class="badge" th:if="${film.genre}" th:text="${film.genre}">Genre</span>
+                    <h3 th:text="${film.titre}">Titre du film</h3>
+                    <p class="muted">
+                        <span th:text="${film.dureeMinutes} + ' min'">120 min</span>
+                        <span th:if="${film.dateSortie}">
+                            · <span th:text="${@format.date(film.dateSortie)}">01/01/2026</span>
+                        </span>
+                    </p>
+                    <a class="btn btn-small" th:href="@{/seances(filmId=${film.id})}">Voir les séances</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section aria-labelledby="titre-prochaines">
+        <div class="section-head">
+            <h2 id="titre-prochaines">Prochaines séances</h2>
+            <a th:href="@{/seances}">Tout le planning</a>
+        </div>
+        <div th:if="${#lists.isEmpty(seances)}" class="empty">
+            Aucune séance à venir dans les prochains jours.
+        </div>
+        <div th:unless="${#lists.isEmpty(seances)}" class="screening-list">
+            <article class="screening" th:each="seance : ${seances}">
+                <div class="screening-date">
+                    <span th:text="${@format.date(seance.debut)}">05/11/2026</span>
+                    <strong th:text="${@format.heure(seance.debut)}">20:00</strong>
+                </div>
+                <div class="screening-info">
+                    <h3 th:text="${seance.filmTitre}">Titre du film</h3>
+                    <p class="muted">
+                        <span th:text="${seance.salleNom}">Salle</span>
+                        <span aria-hidden="true"> · </span>
+                        <span th:text="${@format.monnaie(seance.prixUnitaire)}">9,90 €</span>
+                    </p>
+                </div>
+                <div class="screening-action">
+                    <span class="badge"
+                          th:classappend="${seance.placesRestantes == 0 ? 'badge-muted' : 'badge-success'}"
+                          th:text="${seance.placesRestantes == 0 ? 'Complet' : seance.placesRestantes + ' places'}">
+                        12 places
+                    </span>
+                    <a th:if="${seance.placesRestantes > 0}" class="btn btn-primary btn-small"
+                       th:href="@{/reservation/{id}(id=${seance.id})}">Réserver</a>
+                    <span th:if="${seance.placesRestantes == 0}" class="btn btn-small" aria-disabled="true">
+                        Complet
+                    </span>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

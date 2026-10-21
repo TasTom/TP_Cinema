@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Réservations')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="eyebrow">Administration</p>
+    <h1>Réservations</h1>
+    <p class="lead">Vue consolidée des réservations enregistrées.</p>
+
+    <div th:if="${#lists.isEmpty(reservations)}" class="empty">Aucune réservation pour le moment.</div>
+    <div th:unless="${#lists.isEmpty(reservations)}" class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Film</th>
+                <th>Séance</th>
+                <th>E-mail</th>
+                <th>Places</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Créée le</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservation : ${reservations}">
+                <td><code th:text="${reservation.code}">RES-XXXXXXXXXX</code></td>
+                <td th:text="${reservation.filmTitre}">Film</td>
+                <td th:text="${@format.dateHeure(reservation.debut)}">05/11/2026 à 20:00</td>
+                <td th:text="${reservation.emailClient}">client@example.test</td>
+                <td th:text="${reservation.nombrePlaces}">2</td>
+                <td th:text="${@format.monnaie(reservation.montantTotal)}">19,80 €</td>
+                <td>
+                    <span class="badge" th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'badge-success' : 'badge-muted'}"
+                          th:text="${reservation.statut}">CONFIRMEE</span>
+                </td>
+                <td th:text="${@format.dateHeure(reservation.creeeLe)}">21/10/2026 à 12:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titre)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titre} + ' · CinéBil'">CinéBil</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:fragment="header" class="site-header">
+    <div class="container header-inner">
+        <a class="brand" th:href="@{/}" aria-label="CinéBil, retour à l'accueil">
+            <span class="brand-mark" aria-hidden="true">C</span>
+            <span>CinéBil</span>
+        </a>
+        <nav class="nav" aria-label="Navigation principale">
+            <a th:href="@{/}">Accueil</a>
+            <a th:href="@{/films}">Films</a>
+            <a th:href="@{/seances}">Séances</a>
+            <a th:if="${estAdmin or estProgrammateur}" th:href="@{/admin}">Administration</a>
+        </nav>
+        <div class="user-area">
+            <th:block th:if="${currentUser != null}">
+                <span class="user-name" th:text="${currentUser}">client</span>
+                <form th:action="@{/logout}" method="post" class="inline-form">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit" class="btn btn-ghost btn-small">Déconnexion</button>
+                </form>
+            </th:block>
+            <a th:if="${currentUser == null}" class="btn btn-small" th:href="@{/login}">Connexion</a>
+        </div>
+    </div>
+</header>
+
+<footer th:fragment="footer" class="site-footer">
+    <div class="container footer-inner">
+        <span>CinéBil · Billetterie de cinéma · Projet BUT Informatique 3</span>
+        <span>
+            <a th:href="@{/swagger-ui.html}">Documentation API</a>
+            <span aria-hidden="true"> · </span>
+            <a th:href="@{/actuator/health}">Santé du service</a>
+        </span>
+    </div>
+</footer>
+
+<div th:fragment="messages">
+    <div th:if="${succes}" class="alert alert-success" role="status" th:text="${succes}"></div>
+    <div th:if="${erreur}" class="alert alert-error" role="alert" th:text="${erreur}"></div>
+</div>
+
+<input th:fragment="csrf" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+</body>
+</html>

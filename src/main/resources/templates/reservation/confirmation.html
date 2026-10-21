@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Réservation confirmée')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main id="contenu" class="container">
+    <div th:if="${reservation != null}">
+        <div class="alert alert-success" role="status">
+            Votre réservation est confirmée.
+        </div>
+
+        <p class="eyebrow">Confirmation</p>
+        <h1>Votre place est réservée</h1>
+        <p class="lead">
+            Conservez votre code de réservation : il vous sera demandé pour toute
+            annulation.
+        </p>
+
+        <div class="two-columns">
+            <section class="summary" aria-labelledby="titre-code">
+                <h2 id="titre-code">Code de réservation</h2>
+                <p><code class="code" th:text="${reservation.code}">RES-XXXXXXXXXX</code></p>
+                <div class="summary-row">
+                    <span>Statut</span>
+                    <strong th:text="${reservation.statut}">CONFIRMEE</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Places</span>
+                    <strong th:text="${reservation.nombrePlaces}">2</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Montant total</span>
+                    <strong th:text="${@format.monnaie(reservation.montantTotal)}">19,80 €</strong>
+                </div>
+            </section>
+
+            <section class="summary" aria-labelledby="titre-seance-confirmee">
+                <h2 id="titre-seance-confirmee" th:text="${reservation.filmTitre}">Titre du film</h2>
+                <div class="summary-row">
+                    <span>Salle</span>
+                    <strong th:text="${reservation.salleNom}">Salle</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Date et heure</span>
+                    <strong th:text="${@format.dateHeure(reservation.debut)}">05/11/2026 à 20:00</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Adresse e-mail</span>
+                    <strong th:text="${reservation.emailClient}">client@example.test</strong>
+                </div>
+            </section>
+        </div>
+
+        <div class="form-actions">
+            <a class="btn btn-primary" th:href="@{/seances}">Réserver une autre séance</a>
+            <a class="btn btn-ghost" th:href="@{/}">Retour à l'accueil</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

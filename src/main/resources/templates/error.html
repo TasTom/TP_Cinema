@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Erreur · CinéBil</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="container">
+    <section class="auth-card" aria-labelledby="titre-erreur">
+        <p class="eyebrow">Erreur <span th:text="${status}">500</span></p>
+        <h1 id="titre-erreur" th:text="${status == 404 ? 'Page introuvable' : 'Une erreur est survenue'}">
+            Une erreur est survenue
+        </h1>
+        <p class="lead">La page demandée est indisponible ou une erreur interne s'est produite.</p>
+        <p class="muted" th:if="${path}">Chemin : <code th:text="${path}">/chemin</code></p>
+        <div class="form-actions">
+            <a class="btn btn-primary" th:href="@{/}">Retour à l'accueil</a>
+            <a class="btn btn-ghost" th:href="@{/seances}">Voir les séances</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
